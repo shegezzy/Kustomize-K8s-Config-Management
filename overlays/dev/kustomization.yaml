@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - configmap.yaml
+  - secret.yaml
+patches:
+  - path: patch.yaml
+    target:
+      kind: Deployment
+      name: webapp-deployment
+
+configMapGenerator:
+  - name: dev-config
+    literals:
+      - LOG_LEVEL=DEBUG
+      - FEATURE_FLAG=true
+
+secretGenerator:
+  - name: dev-secret
+    literals:
+      - DB_PASSWORD=devPassword123
+      - API_KEY=devApiKey456
+
+generatorOptions:
+  disableNameSuffixHash: true
