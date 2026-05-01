@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydeployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx               # ← No tag, so Kustomize can patch it
+        ports:
+        - containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: app-config      # ← Refers to configMapGenerator 
